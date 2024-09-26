@@ -1,23 +1,19 @@
-import React from "react";
-import { Button } from "./ui/button";
 import Image from "next/image";
 
+import { Button } from "./ui/button";
+
 interface ButtonProps {
-  isLoading?: boolean;
+  isLoading: boolean;
   className?: string;
   children: React.ReactNode;
 }
 
-export default function SubmitButton({
-  isLoading,
-  className,
-  children,
-}: ButtonProps) {
+const SubmitButton = ({ isLoading, className, children }: ButtonProps) => {
   return (
     <Button
       type="submit"
-      className={className ?? "shad-primary-btn w-full"}
       disabled={isLoading}
+      className={className ?? "shad-primary-btn w-full"}
     >
       {isLoading ? (
         <div className="flex items-center gap-4">
@@ -28,11 +24,13 @@ export default function SubmitButton({
             height={24}
             className="animate-spin"
           />
-          Carregando...
+          Loading...
         </div>
       ) : (
         children
       )}
     </Button>
   );
-}
+};
+
+export default SubmitButton;
