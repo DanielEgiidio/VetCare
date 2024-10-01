@@ -3,7 +3,8 @@ declare type SearchParamProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-declare type Gender = "Macho" | "Femea";
+declare type Sex = "Macho" | "Femea";
+declare type Gender = "Masculino" | "Feminino" | "Outros";
 declare type Status = "pending" | "scheduled" | "cancelled";
 
 declare interface CreateUserParams {
@@ -17,20 +18,22 @@ declare interface User extends CreateUserParams {
 
 declare interface RegisterUserParams extends CreateUserParams {
   userId: string;
-  age: Date;
+  age: string;
+  birthDate: Date;
   gender: Gender;
+  sex: Sex;
   address: string;
   weight: string;
   emergencyContactName: string;
   emergencyContactNumber: string;
-  pastMedicalHistory: string;
+  pastMedicalHistory: string | undefined;
   healthPlan: string;
-  healthPlanNumber: string;
+  occupation: string;
   healthPlanNumber: string;
   ambience: string | undefined;
+  mainComplain: string | undefined;
   feed: string | undefined;
   deworming: string | undefined;
-  pastMedicalHistory: string | undefined;
   ownerIdType: string | undefined;
   ownerId: string | undefined;
   ownerIdDocument: FormData | undefined;
