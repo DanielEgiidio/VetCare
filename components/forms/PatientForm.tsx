@@ -54,8 +54,8 @@ export const PatientForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex-1 space-y-6">
         <section className="mb-12 space-y-4">
-          <h1 className="header">Hi there 👋</h1>
-          <p className="text-dark-700">Get started with appointments.</p>
+          <h1 className="header">Olá seja bem-vindo 👋</h1>
+          <p className="text-dark-700">Agende agora sua consulta.</p>
         </section>
 
         <ReusableFormField
@@ -86,7 +86,7 @@ export const PatientForm = () => {
           placeholder="(555) 123-4567"
         />
 
-        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        <SubmitButton isLoading={isLoading}>Cadastrar consulta</SubmitButton>
       </form>
     </Form>
   );

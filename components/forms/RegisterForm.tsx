@@ -106,7 +106,7 @@ const RegisterForm = ({ user }: { user: User }) => {
     } catch (error) {
       console.error("Erro ao registrar paciente:", error);
     } finally {
-      setIsLoading(false); // Desativando loading após tentativa
+      setIsLoading(false);
     }
   };
 
@@ -426,7 +426,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           label="Eu li e aceito os termos de uso e privacidade"
         />
 
-        <SubmitButton isLoading={isLoading}>Get Started</SubmitButton>
+        <SubmitButton isLoading={isLoading}>Cadastrar consulta</SubmitButton>
       </form>
     </Form>
   );

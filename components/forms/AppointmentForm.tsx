@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
@@ -15,16 +15,24 @@ import ReusableFormField, { FormFieldType } from "../ReusableFormField";
 import { getAppointmentSchema } from "@/lib/validationForm";
 import { Doctors } from "@/constants";
 import { SelectItem } from "../ui/select";
-import { createAppointment } from "@/lib/actions/appointment.actions";
+import {
+  createAppointment,
+  updateAppointment,
+} from "@/lib/actions/appointment.actions";
+import { Appointment } from "@/types/appwrite.types";
 
 export const AppointmentForm = ({
   userId,
   patientId,
-  type,
+  type = "create",
+  appointment,
+  setOpen,
 }: {
   userId: string;
   patientId: string;
+  appointment?: Appointment;
   type: "create" | "cancel" | "schedule";
+  setOpen?: Dispatch<SetStateAction<boolean>>;
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -34,11 +42,13 @@ export const AppointmentForm = ({
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryVet: "",
-      schedule: new Date(),
-      reason: "",
-      note: "",
-      cancellationReason: "",
+      primaryVet: appointment ? appointment?.primaryVet : "",
+      schedule: appointment
+        ? new Date(appointment?.schedule!)
+        : new Date(Date.now()),
+      reason: appointment ? appointment.reason : "",
+      note: appointment?.note || "",
+      cancellationReason: appointment?.cancellationReason || "",
     },
   });
 
@@ -79,31 +89,32 @@ export const AppointmentForm = ({
             `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
           );
         }
-        //   } else {
-        //     const appointmentToUpdate = {
-        //       userId,
-        //       appointmentId: appointment?.$id!,
-        //       appointment: {
-        //         primaryVet: values.primaryVet,
-        //         schedule: new Date(values.schedule),
-        //         status: status as Status,
-        //         cancellationReason: values.cancellationReason,
-        //       },
-        //       type,
-        //     };
+      } else {
+        const appointmentToUpdate = {
+          userId,
+          appointmentId: appointment?.$id!,
+          appointment: {
+            primaryVet: values.primaryVet,
+            schedule: new Date(values.schedule),
+            status: status as Status,
+            cancellationReason: values.cancellationReason,
+          },
+          type,
+        };
 
-        //     const updatedAppointment = await updateAppointment(appointmentToUpdate);
+        const updatedAppointment = await updateAppointment(appointmentToUpdate);
 
-        //     if (updatedAppointment) {
-        //       setOpen && setOpen(false);
-        //       form.reset();
-        //     }
+        if (updatedAppointment) {
+          setOpen && setOpen(false);
+          form.reset();
+        }
       }
     } catch (error) {
       console.log(error);
     }
     setIsLoading(false);
   };
+
   let buttonLabel;
 
   switch (type) {
