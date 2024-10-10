@@ -62,8 +62,8 @@ export const PatientForm = () => {
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="name"
-          label="Full name"
-          placeholder="John Doe"
+          label="Primeiro Nome:"
+          placeholder="John"
           iconSrc="/assets/icons/user.svg"
           iconAlt="user"
         />
@@ -72,7 +72,7 @@ export const PatientForm = () => {
           fieldType={FormFieldType.INPUT}
           control={form.control}
           name="email"
-          label="Email"
+          label="Email:"
           placeholder="johndoe@gmail.com"
           iconSrc="/assets/icons/email.svg"
           iconAlt="email"
@@ -82,7 +82,7 @@ export const PatientForm = () => {
           fieldType={FormFieldType.PHONE_INPUT}
           control={form.control}
           name="phone"
-          label="Phone number"
+          label="Número de Celular:"
           placeholder="(555) 123-4567"
         />
 
