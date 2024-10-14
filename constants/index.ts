@@ -2,23 +2,16 @@ export const GenderOptions = ["Masculino", "Feminino", "Outros"];
 export const SexOptions = ["Macho", "Femea"];
 
 export const PatientFormDefaultValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
   birthDate: new Date(Date.now()),
   age: "",
   gender: "Masculino" as Gender,
   sex: "Macho" as Sex,
   address: "",
   occupation: "",
-  emergencyContactName: "",
-  emergencyContactNumber: "",
   primaryVet: "",
+  petName: "",
   mainComplain: "",
   weight: "",
-  ambience: "",
-  feed: "",
   pastMedicalHistory: "",
   deworming: "",
   healthPlan: "",
@@ -31,19 +24,7 @@ export const PatientFormDefaultValues = {
   privacyConsent: false,
 };
 
-export const IdentificationTypes = [
-  "Certidão de Nascimento",
-  "Carteira de Motorista",
-  "Carteira de Trabalho",
-  "Carteira Militar",
-  "Carteira de Identidade",
-  "Passaporte",
-  "Carteira de Residência",
-  "CPF",
-  "RG",
-  "Carteira de Estudante",
-  "Título de Eleitor",
-];
+export const IdentificationTypes = ["CPF", "RG"];
 
 export const Doctors = [
   {

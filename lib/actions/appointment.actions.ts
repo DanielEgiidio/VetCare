@@ -96,7 +96,6 @@ export const getRecentAppointmentList = async () => {
 export const updateAppointment = async ({
   appointmentId,
   userId,
-  timeZone,
   appointment,
   type,
 }: UpdateAppointmentParams) => {
@@ -111,17 +110,17 @@ export const updateAppointment = async ({
 
     if (!updatedAppointment) throw Error;
 
-    // Send SMS notification OTP
-    const smsMessage = `Olá da vetCare. ${
-      type === "schedule"
-        ? `Sua consulta está confirmada para ${
-            formatDateTime(appointment.schedule!, timeZone).dateTime
-          } com o(a) Dr(a). ${appointment.primaryVet}`
-        : `Lamentamos informar que a sua consulta para ${
-            formatDateTime(appointment.schedule!, timeZone).dateTime
-          } foi cancelada. Motivo:  ${appointment.cancellationReason}`
-    }.`;
-    await sendSMSNotification(userId, smsMessage);
+    // // Send SMS notification OTP
+    // const smsMessage = `Olá da vetCare. ${
+    //   type === "schedule"
+    //     ? `Sua consulta está confirmada para ${
+    //         formatDateTime(appointment.schedule!, timeZone).dateTime
+    //       } com o(a) Dr(a). ${appointment.primaryVet}`
+    //     : `Lamentamos informar que a sua consulta para ${
+    //         formatDateTime(appointment.schedule!, timeZone).dateTime
+    //       } foi cancelada. Motivo:  ${appointment.cancellationReason}`
+    // }.`;
+    // await sendSMSNotification(userId, smsMessage);
     revalidatePath("/admin");
 
     return parseStringify(updatedAppointment);

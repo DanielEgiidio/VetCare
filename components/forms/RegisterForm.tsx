@@ -6,17 +6,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-import Image from "next/image";
-
 import { Form, FormControl } from "@/components/ui/form";
 import "react-phone-number-input/style.css";
 
 import SubmitButton from "../SubmitButton";
 import ReusableFormField, { FormFieldType } from "../ReusableFormField";
 import { PatientFormValidation } from "@/lib/validationForm";
-import { registerPatient } from "@/lib/actions/patient.actions";
+
 import {
-  Doctors,
   GenderOptions,
   IdentificationTypes,
   PatientFormDefaultValues,
@@ -27,12 +24,13 @@ import { Label } from "../ui/label";
 import { SelectItem } from "../ui/select";
 import FileUploader from "../FileUploader";
 import CustomFormField from "../ReusableFormField";
+import { registerPatient } from "@/lib/actions/patient.actions";
 
 const RegisterForm = ({ user }: { user: User }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<z.infer<typeof PatientFormValidation>>({
+  const form = useForm({
     resolver: zodResolver(PatientFormValidation),
     defaultValues: {
       ...PatientFormDefaultValues,
@@ -43,17 +41,11 @@ const RegisterForm = ({ user }: { user: User }) => {
   });
 
   const onSubmit = async (values: z.infer<typeof PatientFormValidation>) => {
-    console.log("Erros de Validação:", form.formState.errors);
-
-    setIsLoading(true); // Ativando loading
-    console.log("Formulário enviado com valores:", values);
+    console.log("valores do formulário: ", values);
+    setIsLoading(true);
 
     let formData;
     if (values.ownerIdDocument && values.ownerIdDocument?.length > 0) {
-      console.log(
-        "Documento de Identificação Detectado:",
-        values.ownerIdDocument
-      );
       const blobFile = new Blob([values.ownerIdDocument[0]], {
         type: values.ownerIdDocument[0].type,
       });
@@ -68,46 +60,39 @@ const RegisterForm = ({ user }: { user: User }) => {
     try {
       const patient = {
         userId: user.$id,
-        name: values.name,
-        email: values.email,
+        name: user.name,
+        email: user.email,
         phone: values.phone,
         birthDate: new Date(values.birthDate),
-        age: values.age,
         gender: values.gender,
         sex: values.sex,
         address: values.address,
         occupation: values.occupation,
-        emergencyContactName: values.emergencyContactName,
-        emergencyContactNumber: values.emergencyContactNumber,
         primaryVet: values.primaryVet,
-        mainComplain: values.mainComplain,
+        petName: values.petName,
+        age: values.age,
+        weight: values.weight,
         healthPlan: values.healthPlan,
         healthPlanNumber: values.healthPlanNumber,
+        mainComplain: values.mainComplain,
         deworming: values.deworming,
-        feed: values.feed,
-        weight: values.weight,
-        ambience: values.ambience,
-        pastMedicalHistory: values.pastMedicalHistory || "",
-        ownerIdType: values.ownerIdType || "",
-        ownerId: values.ownerId || "",
+        ownerIdType: values.ownerIdType,
+        ownerId: values.ownerId,
         ownerIdDocument: values.ownerIdDocument ? formData : undefined,
         privacyConsent: values.privacyConsent,
+        pastMedicalHistory: values.pastMedicalHistory,
       };
 
-      console.log("Tentando registrar paciente:", patient);
-
       const newPatient = await registerPatient(patient);
-
-      console.log("Paciente registrado:", newPatient);
 
       if (newPatient) {
         router.push(`/patients/${user.$id}/new-appointment`);
       }
     } catch (error) {
-      console.error("Erro ao registrar paciente:", error);
-    } finally {
-      setIsLoading(false);
+      console.log(error);
     }
+
+    setIsLoading(false);
   };
 
   return (
@@ -126,40 +111,10 @@ const RegisterForm = ({ user }: { user: User }) => {
         </section>
 
         <section className="space-y-6">
-          <div className="mb-9 space-y-1">
-            <h2 className="sub-header">Informações do tutor</h2>
+          <div className="mt-24 mb-12 space-y-2 ">
+            <h2 className="sub-header uppercase">Informações do tutor</h2>
           </div>
         </section>
-
-        <ReusableFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          label="Nome Completo"
-          name="name"
-          placeholder="Seu José da Silva"
-          iconSrc="/assets/icons/user.svg"
-          iconAlt="user"
-        />
-
-        <div className="flex flex-col gap-6 xl:flex-row">
-          <ReusableFormField
-            fieldType={FormFieldType.INPUT}
-            control={form.control}
-            name="email"
-            label="Email"
-            placeholder="seujosé@gmail.com"
-            iconSrc="/assets/icons/email.svg"
-            iconAlt="email"
-          />
-
-          <ReusableFormField
-            fieldType={FormFieldType.PHONE_INPUT}
-            control={form.control}
-            name="phone"
-            label=" Numero de celular"
-            placeholder="(555) 123-4567"
-          />
-        </div>
 
         <div className="flex flex-col gap-6 xl:flex-row">
           <ReusableFormField
@@ -212,52 +167,53 @@ const RegisterForm = ({ user }: { user: User }) => {
           />
         </div>
 
-        <div className="flex flex-col gap-6 xl:flex-row">
-          <ReusableFormField
-            fieldType={FormFieldType.INPUT}
-            control={form.control}
-            name="emergencyContactName"
-            label="Nome do contato de emergência"
-            placeholder="Nome do tutor | Nome do responsável"
-          />
+        <ReusableFormField
+          fieldType={FormFieldType.SELECT}
+          control={form.control}
+          name="ownerIdType"
+          label="Tipo de identificação"
+          placeholder="Selecione seu documento de identificação"
+        >
+          {IdentificationTypes.map((types) => (
+            <SelectItem key={types} value={types}>
+              {types}
+            </SelectItem>
+          ))}
+        </ReusableFormField>
 
-          <ReusableFormField
-            fieldType={FormFieldType.PHONE_INPUT}
-            control={form.control}
-            name="emergencyContactNumber"
-            label="Contato de emergência"
-            placeholder="(83) 99999-9999"
-          />
-        </div>
+        <ReusableFormField
+          fieldType={FormFieldType.INPUT}
+          control={form.control}
+          name="ownerId"
+          label="Número de identificação"
+          placeholder="123456789"
+        />
+
+        <ReusableFormField
+          fieldType={FormFieldType.SKELETON}
+          control={form.control}
+          name="ownerIdDocument"
+          label="Foto do documento de identificação"
+          renderSkeleton={(field) => (
+            <FormControl>
+              <FileUploader files={field.value} onChange={field.onChange} />
+            </FormControl>
+          )}
+        />
 
         <section className="space-y-6">
           <div className="mb-9 space-y-1">
-            <h2 className="sub-header">Informações médicas do pet</h2>
+            <h2 className="sub-header uppercase">Informações médicas do pet</h2>
           </div>
         </section>
 
         <ReusableFormField
-          fieldType={FormFieldType.SELECT}
+          fieldType={FormFieldType.INPUT}
           control={form.control}
-          name="primaryVet"
-          label="Médico responsável"
-          placeholder="Selecione seu médico responsável"
-        >
-          {Doctors.map((doctor, i) => (
-            <SelectItem key={doctor.name + i} value={doctor.name}>
-              <div className="flex cursor-pointer items-center gap-2">
-                <Image
-                  src={doctor.image}
-                  width={32}
-                  height={32}
-                  alt="doctor"
-                  className="rounded-full border border-dark-500"
-                />
-                <p>{doctor.name}</p>
-              </div>
-            </SelectItem>
-          ))}
-        </ReusableFormField>
+          name="petName"
+          label="Nome do pet"
+          placeholder="Nome do seu pet"
+        />
 
         <ReusableFormField
           fieldType={FormFieldType.TEXTAREA}
@@ -271,7 +227,7 @@ const RegisterForm = ({ user }: { user: User }) => {
           fieldType={FormFieldType.SKELETON}
           control={form.control}
           name="sex"
-          label="Gênero do pet"
+          label="Sexo do pet"
           renderSkeleton={(field) => (
             <FormControl>
               <RadioGroup
@@ -313,22 +269,6 @@ const RegisterForm = ({ user }: { user: User }) => {
           <ReusableFormField
             fieldType={FormFieldType.TEXTAREA}
             control={form.control}
-            name="ambience"
-            label="Ambientação"
-            placeholder="O pet foi introduzido gradualmente em diferentes cômodos da casa, com acesso a brinquedos e um espaço tranquilo para se acostumar."
-          />
-          <ReusableFormField
-            fieldType={FormFieldType.TEXTAREA}
-            control={form.control}
-            name="feed"
-            label="Alimentação"
-            placeholder=" Alimentação 2 vezes ao dia com ração específica para cães adultos e água fresca disponível o dia todo."
-          />
-        </div>
-        <div className="flex flex-col gap-6 xl:flex-row">
-          <ReusableFormField
-            fieldType={FormFieldType.TEXTAREA}
-            control={form.control}
             name="pastMedicalHistory"
             label="Histórico médico"
             placeholder=" O pet foi diagnosticado com alergia alimentar em 2021 e tratado com dieta específica. Não possui outras condições crônicas."
@@ -361,47 +301,9 @@ const RegisterForm = ({ user }: { user: User }) => {
 
         <section className="space-y-6">
           <div className="mb-9 space-y-1">
-            <h2 className="sub-header">Identificação e verificação</h2>
-          </div>
-        </section>
-
-        <ReusableFormField
-          fieldType={FormFieldType.SELECT}
-          control={form.control}
-          name="ownerIdType"
-          label="Tipo de identificação"
-          placeholder="Selecione seu documento de identificação"
-        >
-          {IdentificationTypes.map((types) => (
-            <SelectItem key={types} value={types}>
-              {types}
-            </SelectItem>
-          ))}
-        </ReusableFormField>
-
-        <ReusableFormField
-          fieldType={FormFieldType.INPUT}
-          control={form.control}
-          name="ownerId"
-          label="Número de identificação"
-          placeholder="123456789"
-        />
-
-        <ReusableFormField
-          fieldType={FormFieldType.SKELETON}
-          control={form.control}
-          name="ownerIdDocument"
-          label="Foto do documento de identificação"
-          renderSkeleton={(field) => (
-            <FormControl>
-              <FileUploader files={field.value} onChange={field.onChange} />
-            </FormControl>
-          )}
-        />
-
-        <section className="space-y-6">
-          <div className="mb-9 space-y-1">
-            <h2 className="sub-header">Termos de uso e privacidade</h2>
+            <h2 className="sub-header uppercase">
+              Termos de uso e privacidade
+            </h2>
           </div>
         </section>
 

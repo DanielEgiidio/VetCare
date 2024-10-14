@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+const eighteenYearsAgo = new Date();
+eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
+
 export const UserFormValidation = z.object({
   name: z
     .string()
@@ -26,7 +29,10 @@ export const PatientFormValidation = z.object({
       (phone) => /^\+\d{10,15}$/.test(phone),
       "Número de telefone inválido"
     ),
-  birthDate: z.coerce.date(),
+  birthDate: z.coerce
+    .date()
+    .max(eighteenYearsAgo, "Você deve ter pelo menos 18 anos para se registrar")
+    .min(new Date("1900-01-01"), "Data de nascimento inválida"),
   age: z
     .string()
     .min(1, "A idade deve ter pelo menos 1 caracter")
@@ -46,20 +52,14 @@ export const PatientFormValidation = z.object({
     .string()
     .min(2, "A ocupação deve ter no mínimo 2 caracteres")
     .max(500, "A ocupação deve ter no máximo 500 caracteres"),
+  petName: z
+    .string()
+    .min(2, "O nome deve ter no mínimo 2 caracteres")
+    .max(50, "O nome deve ter no máximo 50 caracteres"),
   mainComplain: z
     .string()
     .min(2, "A queixa deve ter no mínimo 2 caracteres")
     .max(500, "A queixa deve ter no máximo 255 caracteres"),
-  emergencyContactName: z
-    .string()
-    .min(2, "O nome de contato deve ter no mínimo 2 caracteres")
-    .max(50, "O nome de contato deve ter no máximo 50 caracteres"),
-  emergencyContactNumber: z
-    .string()
-    .refine(
-      (emergencyContactNumber) => /^\+\d{10,15}$/.test(emergencyContactNumber),
-      "Número de telefone inválido"
-    ),
   primaryVet: z.string().min(2, "Selecione pelo menos um médico"),
   healthPlan: z
     .string()
@@ -69,18 +69,10 @@ export const PatientFormValidation = z.object({
     .string()
     .min(2, "O número da apólice deve ter no mínimo 2 caracteres")
     .max(50, "O número da apólice deve ter no máximo 50 caracteres"),
-  ambience: z
-    .string()
-    .min(2, "O nome do seguro deve ter no mínimo 2 caracteres")
-    .max(50, "O nome do seguro deve ter no máximo 50 caracteres"),
-  feed: z
-    .string()
-    .min(2, "O nome do seguro deve ter no mínimo 2 caracteres")
-    .max(50, "O nome do seguro deve ter no máximo 50 caracteres"),
   deworming: z
     .string()
-    .min(2, "O nome do seguro deve ter no mínimo 2 caracteres")
-    .max(50, "O nome do seguro deve ter no máximo 50 caracteres"),
+    .min(2, "Os detalhes da vermifugação deve ter no mínimo 2 caracteres")
+    .max(50, "Os detalhes da vermifugação deve ter no máximo 255 caracteres"),
   pastMedicalHistory: z.string().optional(),
   ownerIdType: z.string().optional(),
   ownerId: z.string().optional(),
