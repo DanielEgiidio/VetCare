@@ -1,8 +1,5 @@
 import { z } from "zod";
 
-const eighteenYearsAgo = new Date();
-eighteenYearsAgo.setFullYear(eighteenYearsAgo.getFullYear() - 18);
-
 export const UserFormValidation = z.object({
   name: z
     .string()
@@ -22,6 +19,18 @@ export const PatientFormValidation = z.object({
     .string()
     .min(2, "O nome deve ter no mínimo 2 caracteres")
     .max(50, "O nome deve ter no máximo 50 caracteres"),
+  petName: z
+    .string()
+    .min(2, "O nome do pet deve ter no mínimo 2 caracteres")
+    .max(50, "O nome do pet deve ter no máximo 50 caracteres"),
+  mainComplain: z
+    .string()
+    .min(2, "A queixa principal deve ter no mínimo 2 caracteres")
+    .max(50, "A queixa principal deve ter no máximo 50 caracteres"),
+  age: z
+    .string()
+    .min(2, "A idade deve ter no mínimo 1 caractere")
+    .max(50, "A idade deve ter no máximo 50 caracteres"),
   email: z.string().email("Endereço de e-mail inválido"),
   phone: z
     .string()
@@ -29,16 +38,9 @@ export const PatientFormValidation = z.object({
       (phone) => /^\+\d{10,15}$/.test(phone),
       "Número de telefone inválido"
     ),
-  birthDate: z.coerce
-    .date()
-    .max(eighteenYearsAgo, "Você deve ter pelo menos 18 anos para se registrar")
-    .min(new Date("1900-01-01"), "Data de nascimento inválida"),
-  age: z
-    .string()
-    .min(1, "A idade deve ter pelo menos 1 caracter")
-    .max(10, "A idade deve ter no máximo 10 caracteres"),
+  birthDate: z.coerce.date(),
   gender: z.enum(["Masculino", "Feminino", "Outros"]),
-  sex: z.enum(["Macho", "Femea"]),
+  sex: z.enum(["Macho", "Fêmea"]),
   weight: z
     .string()
     .min(2, "O peso deve ter no mínimo 5 caracteres")
@@ -47,32 +49,23 @@ export const PatientFormValidation = z.object({
     .string()
     .min(5, "O endereço deve ter no mínimo 5 caracteres")
     .max(500, "O endereço deve ter no máximo 500 caracteres"),
-
   occupation: z
     .string()
     .min(2, "A ocupação deve ter no mínimo 2 caracteres")
     .max(500, "A ocupação deve ter no máximo 500 caracteres"),
-  petName: z
-    .string()
-    .min(2, "O nome deve ter no mínimo 2 caracteres")
-    .max(50, "O nome deve ter no máximo 50 caracteres"),
-  mainComplain: z
-    .string()
-    .min(2, "A queixa deve ter no mínimo 2 caracteres")
-    .max(500, "A queixa deve ter no máximo 255 caracteres"),
   primaryVet: z.string().min(2, "Selecione pelo menos um médico"),
   healthPlan: z
     .string()
-    .min(2, "O nome do seguro deve ter no mínimo 2 caracteres")
-    .max(50, "O nome do seguro deve ter no máximo 50 caracteres"),
+    .min(2, "O nome do plano de saúde deve ter no mínimo 2 caracteres")
+    .max(50, "O nome do plano de saúde deve ter no máximo 50 caracteres"),
+  deworming: z
+    .string()
+    .min(2, "Os detalhes da vermifugação devem ter no mínimo 2 caracteres")
+    .max(50, "Os detalhes da vermifugação devem ter no máximo 255 caracteres"),
   healthPlanNumber: z
     .string()
     .min(2, "O número da apólice deve ter no mínimo 2 caracteres")
     .max(50, "O número da apólice deve ter no máximo 50 caracteres"),
-  deworming: z
-    .string()
-    .min(2, "Os detalhes da vermifugação deve ter no mínimo 2 caracteres")
-    .max(50, "Os detalhes da vermifugação deve ter no máximo 255 caracteres"),
   pastMedicalHistory: z.string().optional(),
   ownerIdType: z.string().optional(),
   ownerId: z.string().optional(),
@@ -81,19 +74,19 @@ export const PatientFormValidation = z.object({
     .boolean()
     .default(false)
     .refine((value) => value === true, {
-      message: "Você deve consentir com o tratamento para prosseguir",
+      message: "Você deve consentir com o tratamento para continuar",
     }),
   disclosureConsent: z
     .boolean()
     .default(false)
     .refine((value) => value === true, {
-      message: "Você deve consentir com a divulgação para prosseguir",
+      message: "Você deve consentir com a divulgação para continuar",
     }),
   privacyConsent: z
     .boolean()
     .default(false)
     .refine((value) => value === true, {
-      message: "Você deve consentir com a privacidade para prosseguir",
+      message: "Você deve consentir com a privacidade para continuar",
     }),
 });
 
@@ -119,12 +112,12 @@ export const ScheduleAppointmentSchema = z.object({
 export const CancelAppointmentSchema = z.object({
   primaryVet: z.string().min(2, "Selecione pelo menos um médico"),
   schedule: z.coerce.date(),
-  reason: z.string().optional(),
-  note: z.string().optional(),
-  cancellationReason: z
+  reason: z
     .string()
     .min(2, "O motivo deve ter no mínimo 2 caracteres")
     .max(500, "O motivo deve ter no máximo 500 caracteres"),
+  note: z.string().optional(),
+  cancellationReason: z.string().optional(),
 });
 
 export function getAppointmentSchema(type: string) {

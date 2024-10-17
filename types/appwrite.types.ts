@@ -11,7 +11,6 @@ export interface Patient extends Models.Document {
   ownerId: string | undefined;
   ownerIdDocument: FormData | undefined;
   address: string;
-
   occupation: string | undefined;
   primaryVet: string | undefined;
   sex: Sex;

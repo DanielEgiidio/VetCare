@@ -2,7 +2,7 @@ export const GenderOptions = ["Masculino", "Feminino", "Outros"];
 export const SexOptions = ["Macho", "Femea"];
 
 export const PatientFormDefaultValues = {
-  birthDate: new Date(Date.now()),
+  birthDate: new Date(),
   age: "",
   gender: "Masculino" as Gender,
   sex: "Macho" as Sex,
@@ -18,7 +18,7 @@ export const PatientFormDefaultValues = {
   healthPlanNumber: "",
   ownerIdType: "RG",
   ownerId: "",
-  ownerIdDocument: [],
+  ownerIdDocument: [] as File[],
   treatmentConsent: false,
   disclosureConsent: false,
   privacyConsent: false,

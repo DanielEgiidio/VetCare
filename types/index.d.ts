@@ -18,22 +18,22 @@ declare interface User extends CreateUserParams {
 
 declare interface RegisterUserParams extends CreateUserParams {
   userId: string;
-  occupation: string;
   birthDate: Date;
+  sex: Sex;
   gender: Gender;
   address: string;
+  primaryVet: string;
+  healthPlan: string;
+  healthPlanNumber: string;
+  mainComplain: string;
+  petName: string;
+  weight: string;
+  deworming: string | undefined;
+  pastMedicalHistory: string | undefined;
+  pastMedicalHistory: string | undefined;
   ownerIdType: string | undefined;
   ownerId: string | undefined;
   ownerIdDocument: FormData | undefined;
-  petName: string | undefined;
-  age: string;
-  sex: Sex;
-  weight: string;
-  pastMedicalHistory: string | undefined;
-  healthPlan: string;
-  healthPlanNumber: string;
-  mainComplain: string | undefined;
-  deworming: string | undefined;
   privacyConsent: boolean;
 }
 
