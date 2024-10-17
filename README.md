@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center"> Vetcare </h1> 
+<p align="center"> <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/DanielEgiidio/VetCare"> <img alt="GitHub Top Language" src="https://img.shields.io/github/languages/top/DanielEgiidio/VetCare" /> <img alt="Repository size" src="https://img.shields.io/github/repo-size/DanielEgiidio/VetCare"> <a href="https://github.com/usuario/VetCare/commits/master"> <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/DanielEgiidio/VetCare"> </a> <img alt="License" src="https://img.shields.io/badge/license-MIT-blue"> </p> <p align="center" > <img src="https://i.ibb.co/8g2ZgfX/Captura-de-tela-2024-10-17-145955.png" alt="Capa do projeto" /> </p>
 
-## Getting Started
+### 💻 About
+Vetcare é uma aplicação que simula uma consulta veterinária online, permitindo que os donos de pets possam agendar e realizar consultas virtuais. Entre os recursos disponíveis na plataforma estão:
 
-First, run the development server:
+- Sistema de reusabilidade de campos de formulários com validação.
+- Autenticação e verificação OTP para o dashboard de administração.
+- Acompanhamento de performance e rastreamento de requisições com Sentry.
+- Suporte a Server-Side Rendering (SSR) para garantir uma experiência rápida e otimizada.
+- Uso do Appwrite para backend, gerenciamento de banco de dados e autenticação.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Features
+- Formulários Reutilizáveis: Campos customizados com validação via Zod.
+- Autenticação com OTP: Segurança reforçada no dashboard de administração.
+- Rastreio de Performance: Análise e rastreamento com o Sentry.
+- SSR e Server Actions: Melhor desempenho utilizando Server-Side Rendering.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### ⚙️ Setup
+Para rodar o projeto localmente, siga os passos abaixo. Lembre-se de configurar as variáveis de ambiente corretamente no arquivo .env., o env.example informa quais as chaves necessárias.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🛠 Technologies
+As principais ferramentas utilizadas no desenvolvimento do projeto incluem:
 
-## Learn More
+- Next.js - Framework React para SSR e Server Actions.
+- TypeScript - Superset do JavaScript.
+- Tailwind CSS - Framework CSS para estilos.
+- Appwrite - Backend, autenticação e banco de dados.
+- React Hook Form - Gerenciamento de formulários.
+- Zod - Validação de dados de formulários.
+- Sentry - Rastreio de performance e erros.
 
-To learn more about Next.js, take a look at the following resources:
+Para mais detalhes das dependências, veja o arquivo package.json.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+📝 License
+Este projeto está sob a licença MIT. Consulte o arquivo LICENSE para mais informações.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
